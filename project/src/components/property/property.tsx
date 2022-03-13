@@ -1,8 +1,17 @@
 import React from 'react';
 import '../../public/css/main.css';
+import CommentForm from '../comment-form/comment-form';
+import {useParams} from 'react-router';
+import {Offers, Offer} from '../../types/offer';
 
+type PropertyProps = {
+  offers: Offers;
+}
 
-function Property(): JSX.Element {
+function Property({offers}:PropertyProps): JSX.Element {
+  const id = useParams();
+  const propertyOffer : Offer = offers.filter((offer) => String(offer.id)===id.id)[0];
+  const stars = `${propertyOffer.rating*20}%`;
   return (
     <React.Fragment>
       <div style={{display: 'none'}}>
@@ -40,52 +49,49 @@ function Property(): JSX.Element {
           <section className="property">
             <div className="property__gallery-container container">
               <div className="property__gallery">
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="./img/room.jpg" alt='' />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="./img/apartment-01.jpg" alt='' />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="./img/apartment-02.jpg" alt='' />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="./img/apartment-03.jpg" alt='' />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="./img/studio-01.jpg" alt='' />
-                </div>
-                <div className="property__image-wrapper">
-                  <img className="property__image" src="./img/apartment-01.jpg" alt='' />
-                </div>
+                {
+                  propertyOffer.images.map((img) => (
+                    <div className="property__image-wrapper" key={propertyOffer.id}>
+                      <img className="property__image" src={img} alt='' />
+                    </div> ))
+                }
               </div>
             </div>
             <div className="property__container container">
               <div className="property__wrapper">
-                <div className="property__mark">
-                  <span>Premium</span>
-                </div>
+                {
+                  propertyOffer.isPremium ? (<div className="property__mark"><span>Premium</span></div>) : null
+                }
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    Beautiful &amp; luxurious studio at great location
+                    {propertyOffer.name}
                   </h1>
-                  <button className="property__bookmark-button button" type="button">
-                    <svg className="property__bookmark-icon" width={31} height={33}>
-                      <use xlinkHref="#icon-bookmark" />
-                    </svg>
-                    <span className="visually-hidden">To bookmarks</span>
-                  </button>
+                  {
+                    propertyOffer.isFavorite ? (
+                      <button className="property__bookmark-button button" type="button">
+                        <svg className="property__bookmark-icon" style={{stroke: '#4481c3'}} width={31} height={33}>
+                          <use xlinkHref="#icon-bookmark" />
+                        </svg>
+                        <span className="visually-hidden">To bookmarks</span>
+                      </button>) : (
+                      <button className="property__bookmark-button button" type="button">
+                        <svg className="property__bookmark-icon" width={31} height={33}>
+                          <use xlinkHref="#icon-bookmark" />
+                        </svg>
+                        <span className="visually-hidden">To bookmarks</span>
+                      </button>)
+                  }
                 </div>
                 <div className="property__rating rating">
                   <div className="property__stars rating__stars">
-                    <span style={{width: '80%'}} />
+                    <span style={{width: stars}} />
                     <span className="visually-hidden">Rating</span>
                   </div>
-                  <span className="property__rating-value rating__value">4.8</span>
+                  <span className="property__rating-value rating__value"> {propertyOffer.rating}</span>
                 </div>
                 <ul className="property__features">
                   <li className="property__feature property__feature--entire">
-                    Apartment
+                    {propertyOffer.type}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
                     3 Bedrooms
@@ -95,7 +101,7 @@ function Property(): JSX.Element {
                   </li>
                 </ul>
                 <div className="property__price">
-                  <b className="property__price-value">€120</b>
+                  <b className="property__price-value"> {propertyOffer.price}</b>
                   <span className="property__price-text">&nbsp;night</span>
                 </div>
                 <div className="property__inside">
@@ -181,48 +187,49 @@ function Property(): JSX.Element {
                       </div>
                     </li>
                   </ul>
-                  <form className="reviews__form form" action="/#" method="post">
-                    <label className="reviews__label form__label" htmlFor="review">Your review</label>
-                    <div className="reviews__rating-form form__rating">
-                      <input className="form__rating-input visually-hidden" name="rating" defaultValue={5} id="5-stars" type="radio" />
-                      <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">
-                        <svg className="form__star-image" width={37} height={33}>
-                          <use xlinkHref="#icon-star" />
-                        </svg>
-                      </label>
-                      <input className="form__rating-input visually-hidden" name="rating" defaultValue={4} id="4-stars" type="radio" />
-                      <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">
-                        <svg className="form__star-image" width={37} height={33}>
-                          <use xlinkHref="#icon-star" />
-                        </svg>
-                      </label>
-                      <input className="form__rating-input visually-hidden" name="rating" defaultValue={3} id="3-stars" type="radio" />
-                      <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">
-                        <svg className="form__star-image" width={37} height={33}>
-                          <use xlinkHref="#icon-star" />
-                        </svg>
-                      </label>
-                      <input className="form__rating-input visually-hidden" name="rating" defaultValue={2} id="2-stars" type="radio" />
-                      <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">
-                        <svg className="form__star-image" width={37} height={33}>
-                          <use xlinkHref="#icon-star" />
-                        </svg>
-                      </label>
-                      <input className="form__rating-input visually-hidden" name="rating" defaultValue={1} id="1-star" type="radio" />
-                      <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">
-                        <svg className="form__star-image" width={37} height={33}>
-                          <use xlinkHref="#icon-star" />
-                        </svg>
-                      </label>
-                    </div>
-                    <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" defaultValue={''} />
-                    <div className="reviews__button-wrapper">
-                      <p className="reviews__help">
-                        To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
-                      </p>
-                      <button className="reviews__submit form__submit button" type="submit" disabled>Submit</button>
-                    </div>
-                  </form>
+                  <CommentForm />
+                  {/*<form className="reviews__form form" action="/#" method="post">*/}
+                  {/*  <label className="reviews__label form__label" htmlFor="review">Your review</label>*/}
+                  {/*  <div className="reviews__rating-form form__rating">*/}
+                  {/*    <input className="form__rating-input visually-hidden" name="rating" defaultValue={5} id="5-stars" type="radio" />*/}
+                  {/*    <label htmlFor="5-stars" className="reviews__rating-label form__rating-label" title="perfect">*/}
+                  {/*      <svg className="form__star-image" width={37} height={33}>*/}
+                  {/*        <use xlinkHref="#icon-star" />*/}
+                  {/*      </svg>*/}
+                  {/*    </label>*/}
+                  {/*    <input className="form__rating-input visually-hidden" name="rating" defaultValue={4} id="4-stars" type="radio" />*/}
+                  {/*    <label htmlFor="4-stars" className="reviews__rating-label form__rating-label" title="good">*/}
+                  {/*      <svg className="form__star-image" width={37} height={33}>*/}
+                  {/*        <use xlinkHref="#icon-star" />*/}
+                  {/*      </svg>*/}
+                  {/*    </label>*/}
+                  {/*    <input className="form__rating-input visually-hidden" name="rating" defaultValue={3} id="3-stars" type="radio" />*/}
+                  {/*    <label htmlFor="3-stars" className="reviews__rating-label form__rating-label" title="not bad">*/}
+                  {/*      <svg className="form__star-image" width={37} height={33}>*/}
+                  {/*        <use xlinkHref="#icon-star" />*/}
+                  {/*      </svg>*/}
+                  {/*    </label>*/}
+                  {/*    <input className="form__rating-input visually-hidden" name="rating" defaultValue={2} id="2-stars" type="radio" />*/}
+                  {/*    <label htmlFor="2-stars" className="reviews__rating-label form__rating-label" title="badly">*/}
+                  {/*      <svg className="form__star-image" width={37} height={33}>*/}
+                  {/*        <use xlinkHref="#icon-star" />*/}
+                  {/*      </svg>*/}
+                  {/*    </label>*/}
+                  {/*    <input className="form__rating-input visually-hidden" name="rating" defaultValue={1} id="1-star" type="radio" />*/}
+                  {/*    <label htmlFor="1-star" className="reviews__rating-label form__rating-label" title="terribly">*/}
+                  {/*      <svg className="form__star-image" width={37} height={33}>*/}
+                  {/*        <use xlinkHref="#icon-star" />*/}
+                  {/*      </svg>*/}
+                  {/*    </label>*/}
+                  {/*  </div>*/}
+                  {/*  <textarea className="reviews__textarea form__textarea" id="review" name="review" placeholder="Tell how was your stay, what you like and what can be improved" defaultValue={''} />*/}
+                  {/*  <div className="reviews__button-wrapper">*/}
+                  {/*    <p className="reviews__help">*/}
+                  {/*      To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.*/}
+                  {/*    </p>*/}
+                  {/*    <button className="reviews__submit form__submit button" type="submit" disabled>Submit</button>*/}
+                  {/*  </div>*/}
+                  {/*</form>*/}
                 </section>
               </div>
             </div>
