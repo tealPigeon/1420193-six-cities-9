@@ -6,7 +6,7 @@ function CommentForm(): JSX.Element {
     review: '',
   });
 
-  const fieldChangeHandle = (evt:any) => {
+  const fieldChangeHandle = (evt:(React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>)) => {
     const {name, value} = evt.target;
     setFormData({...formData, [name]: value});
   };
