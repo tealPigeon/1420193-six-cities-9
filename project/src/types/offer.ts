@@ -8,6 +8,8 @@ export type Offer = {
   isFavorite: boolean;
   isPremium: boolean;
   place:string;
+  lat: number;
+  lng: number;
 };
 
 export type Offers = Offer[];

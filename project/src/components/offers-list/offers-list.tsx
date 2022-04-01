@@ -1,14 +1,22 @@
 import React, {useState} from 'react';
+import {MouseEvent} from 'react';
 import Card from '../card/card';
 import {Offer, Offers} from '../../types/offer';
 
 type OffersListProps = {
   offers: Offers;
+  onListItemHover: (listItemName: string) => void;
 }
 
-function OffersList({offers}:OffersListProps): JSX.Element {
+function OffersList({offers, onListItemHover}:OffersListProps): JSX.Element {
 
   const [activeCardId, setActiveCardId] = useState<Offer | undefined>();
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  const listItemHoverHandler = (event: MouseEvent<HTMLLIElement>) => {
+    event.preventDefault();
+    onListItemHover(event.currentTarget.innerText);
+  };
+
 
   return (
     <>

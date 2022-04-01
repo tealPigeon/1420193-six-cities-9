@@ -18,6 +18,8 @@ export const offers: Offers = [
     isFavorite: false,
     isPremium: true,
     place: 'Amsterdam',
+    lat: 52.3909553943508,
+    lng:  4.85309666406198,
   },
   {
     id:2,
@@ -36,6 +38,8 @@ export const offers: Offers = [
     isFavorite: true,
     isPremium: false,
     place: 'Amsterdam',
+    lat: 52.369553943508,
+    lng: 4.85309666406198,
   },
   {
     id:3,
@@ -54,6 +58,8 @@ export const offers: Offers = [
     isFavorite: true,
     isPremium: true,
     place: 'Amsterdam',
+    lat: 52.3909553943508,
+    lng: 4.929309666406198,
   },
   {
     id:4,
@@ -72,6 +78,8 @@ export const offers: Offers = [
     isFavorite: true,
     isPremium: true,
     place: 'Amsterdam',
+    lat: 52.3809553943508,
+    lng: 4.939309666406198,
   },
   {
     id:5,
@@ -90,6 +98,8 @@ export const offers: Offers = [
     isFavorite: false,
     isPremium: true,
     place: 'Amsterdam',
+    lat: 52.3409553943500,
+    lng: 4.939309666406100,
   },
 ];
 
