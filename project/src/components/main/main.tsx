@@ -1,13 +1,25 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../../public/css/main.css';
 import OffersList from '../offers-list/offers-list';
-import {Offers} from '../../types/offer';
+import {Offers, Offer} from '../../types/offer';
+import Map from '../map/map';
 
 type MainProps = {
   offers: Offers;
 }
 
 function Main({offers}: MainProps): JSX.Element {
+
+  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
+    undefined,
+  );
+
+  const onListItemHover = (listItemName: string) => {
+    const currentPoint = offers.find((offer) => offer.name === listItemName);
+
+    setSelectedPoint(currentPoint);
+  };
+
   return (
     <div>
       <div style={{display: 'none'}}>
@@ -100,11 +112,14 @@ function Main({offers}: MainProps): JSX.Element {
                   </ul>
                 </form>
                 <div className="cities__places-list places__list tabs__content">
-                  <OffersList offers={offers}/>
+                  <OffersList offers={offers} onListItemHover={onListItemHover}/>
                 </div>
               </section>
               <div className="cities__right-section">
-                <section className="cities__map map" />
+                {/*<section className="cities__map map">*/}
+                <div className="cities__map map">
+                  <Map offers={offers} selectedPoint={selectedPoint}/>
+                </div>
               </div>
             </div>
           </div>
