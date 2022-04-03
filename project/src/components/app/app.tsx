@@ -7,12 +7,14 @@ import SignIn  from '../login/login';
 import PrivateRoute from '../private-route';
 import NotFound from '../not-found/not-found';
 import {Offers} from '../../types/offer';
+import {Reviews} from '../../types/reviews';
 
 type AppProps = {
   offers: Offers;
+  reviews: Reviews;
 }
 
-function App({offers}: AppProps): JSX.Element {
+function App({offers, reviews}: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
@@ -22,7 +24,7 @@ function App({offers}: AppProps): JSX.Element {
           <NotFound/>
         }
         />
-        <Route path='offer/:id' element={<Room offers={offers.slice(0, 3)}/>} />
+        <Route path='offer/:id' element={<Room offers={offers} reviews={reviews}/>} />
         <Route path='favorites' element=
           {
             <PrivateRoute>
