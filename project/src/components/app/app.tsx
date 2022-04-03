@@ -22,7 +22,7 @@ function App({offers}: AppProps): JSX.Element {
           <NotFound/>
         }
         />
-        <Route path='offer/:id' element={<Room offers={offers}/>} />
+        <Route path='offer/:id' element={<Room offers={offers.slice(0, 3)}/>} />
         <Route path='favorites' element=
           {
             <PrivateRoute>
