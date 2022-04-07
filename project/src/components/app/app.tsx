@@ -8,23 +8,25 @@ import PrivateRoute from '../private-route';
 import NotFound from '../not-found/not-found';
 import {Offers} from '../../types/offer';
 import {Reviews} from '../../types/reviews';
+import {City} from '../../types/city';
 
 type AppProps = {
   offers: Offers;
   reviews: Reviews;
+  cities: City[];
 }
 
-function App({offers, reviews}: AppProps): JSX.Element {
+function App({offers, reviews, cities}: AppProps): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='login' element={<SignIn />} />
-        <Route index element={<Main offers={offers}/>} />
+        <Route index element={<Main cities={cities}/>} />
         <Route path='*' element={
           <NotFound/>
         }
         />
-        <Route path='offer/:id' element={<Room offers={offers} reviews={reviews}/>} />
+        <Route path='offer/:id' element={<Room reviews={reviews}/>} />
         <Route path='favorites' element=
           {
             <PrivateRoute>

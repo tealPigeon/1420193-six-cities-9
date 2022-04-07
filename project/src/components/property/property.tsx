@@ -2,19 +2,22 @@ import React, {useState} from 'react';
 import '../../public/css/main.css';
 import CommentForm from '../comment-form/comment-form';
 import {useParams} from 'react-router';
-import {Offers, Offer} from '../../types/offer';
+import {Offer} from '../../types/offer';
 import ReviewsList from '../reviews-list/reviews-list';
 import {Reviews} from '../../types/reviews';
 import Map from '../map/map';
 import OffersList from '../offers-list/offers-list';
+import {useAppSelector} from '../../hooks';
 
 type PropertyProps = {
-  offers: Offers;
+  // offers: Offers;
   reviews: Reviews;
 }
 
-function Property({offers, reviews}:PropertyProps): JSX.Element {
+function Property({reviews}:PropertyProps): JSX.Element {
   const id = useParams();
+  const city = useAppSelector((state) => state.city);
+  const offers = useAppSelector((state) => state.offers);
   const propertyOffer : Offer = offers.filter((offer) => String(offer.id)===id.id)[0];
   const stars = `${propertyOffer.rating*20}%`;
 
@@ -186,7 +189,7 @@ function Property({offers, reviews}:PropertyProps): JSX.Element {
             </div>
             {/*<section className="property__map map"/>*/}
             <section style={{width: '1300px',  margin: '20px auto'}}>
-              <Map offers={offers.slice(0, 3)} selectedPoint={selectedPoint}/>
+              <Map city={city} offers={offers.slice(0, 3)} selectedPoint={selectedPoint}/>
             </section>
 
 
