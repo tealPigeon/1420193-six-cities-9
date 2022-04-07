@@ -1,26 +1,19 @@
-import React, {useState} from 'react';
-import {MouseEvent} from 'react';
+import React from 'react';
 import Card from '../card/card';
-import {Offer, Offers} from '../../types/offer';
+import {Offers} from '../../types/offer';
+import {deleteOffer, saveOffer} from '../../store/action';
+import {useAppDispatch} from '../../hooks';
 
 type OffersListProps = {
   offers: Offers;
-  onListItemHover: (listItemName: string) => void;
 }
 
-function OffersList({offers, onListItemHover}:OffersListProps): JSX.Element {
-
-  const [activeCardId, setActiveCardId] = useState<Offer | undefined>();
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  const listItemHoverHandler = (event: MouseEvent<HTMLLIElement>) => {
-    event.preventDefault();
-    onListItemHover(event.currentTarget.innerText);
-  };
-
+function OffersList({offers}:OffersListProps): JSX.Element {
+  const dispatch = useAppDispatch();
 
   return (
     <>
-      {offers.map((offer) => <div  key={offer.id}  onMouseOver={() => {setActiveCardId(offer);   /* eslint-disable no-console */ console.log(activeCardId); /* eslint-enable no-console */}}><Card  offer={offer} key={offer.id}  /></div>)}
+      {offers.map((offer) => <div  key={offer.id} onMouseLeave={() => {dispatch(deleteOffer());}} onMouseEnter={() => {dispatch(saveOffer(offer));}}><Card  offer={offer} key={offer.id}  /></div>)}
     </>
   );}
 

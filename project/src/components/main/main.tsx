@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../../public/css/main.css';
 import OffersList from '../offers-list/offers-list';
-import {Offer} from '../../types/offer';
 import Map from '../map/map';
 import CitiesList from '../cities-list/cities-list';
 import {City} from '../../types/city';
 import {useAppSelector} from '../../hooks';
+import SortingOptions from '../sorting-options/sorting-options';
 type MainProps = {
   cities: City[];
 }
@@ -13,15 +13,7 @@ type MainProps = {
 function Main({cities}: MainProps): JSX.Element {
   const {city} = useAppSelector((state) => state);
   const offers =  useAppSelector((state) => state.offers);
-  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
-    undefined,
-  );
-
-  const onListItemHover = (listItemName: string) => {
-    const currentPoint = offers.find((offer) => offer.name === listItemName);
-
-    setSelectedPoint(currentPoint);
-  };
+  const point = useAppSelector((state) => state.savedOffer);
 
   return (
     <div>
@@ -66,28 +58,14 @@ function Main({cities}: MainProps): JSX.Element {
               <section className="cities__places places">
                 <h2 className="visually-hidden">Places</h2>
                 <b className="places__found">{offers.length} places to stay in {city.name}</b>
-                <form className="places__sorting" action="#" method="get">
-                  <span className="places__sorting-caption">Sort by</span>
-                  <span className="places__sorting-type" tabIndex={0}>
-                      Popular
-                    <svg className="places__sorting-arrow" width={7} height={4}>
-                      <use xlinkHref="#icon-arrow-select" />
-                    </svg>
-                  </span>
-                  <ul className="places__options places__options--custom places__options--opened">
-                    <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                    <li className="places__option" tabIndex={0}>Price: low to high</li>
-                    <li className="places__option" tabIndex={0}>Price: high to low</li>
-                    <li className="places__option" tabIndex={0}>Top rated first</li>
-                  </ul>
-                </form>
+                <SortingOptions/>
                 <div className="cities__places-list places__list tabs__content">
-                  <OffersList offers={offers} onListItemHover={onListItemHover}/>
+                  <OffersList offers={offers} />
                 </div>
               </section>
               <div className="cities__right-section">
                 <div className="cities__map map">
-                  <Map city={city} offers={offers} selectedPoint={selectedPoint} key={city.id}/>
+                  <Map city={city} offers={offers} selectedPoint={point} key={city.id}/>
                 </div>
               </div>
             </div>

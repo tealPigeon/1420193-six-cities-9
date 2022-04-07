@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../../public/css/main.css';
 import CommentForm from '../comment-form/comment-form';
 import {useParams} from 'react-router';
@@ -8,28 +8,19 @@ import {Reviews} from '../../types/reviews';
 import Map from '../map/map';
 import OffersList from '../offers-list/offers-list';
 import {useAppSelector} from '../../hooks';
+import {offers} from '../../mocks/offers';
 
 type PropertyProps = {
-  // offers: Offers;
   reviews: Reviews;
 }
 
 function Property({reviews}:PropertyProps): JSX.Element {
   const id = useParams();
   const city = useAppSelector((state) => state.city);
-  const offers = useAppSelector((state) => state.offers);
-  const propertyOffer : Offer = offers.filter((offer) => String(offer.id)===id.id)[0];
+  const point = useAppSelector((state) => state.savedOffer);
+  const propertyOffer : Offer = offers.filter((offer) => String(offer.id)===id.id )[0];
+  const offerList = offers.filter((offer) => offer.city===propertyOffer.city && String(offer.id) !== id.id);
   const stars = `${propertyOffer.rating*20}%`;
-
-  const [selectedPoint, setSelectedPoint] = useState<Offer | undefined>(
-    undefined,
-  );
-
-  const onListItemHover = (listItemName: string) => {
-    const currentPoint = offers.find((offer) => offer.name === listItemName);
-
-    setSelectedPoint(currentPoint);
-  };
 
   return (
     <React.Fragment>
@@ -187,9 +178,8 @@ function Property({reviews}:PropertyProps): JSX.Element {
                 </section>
               </div>
             </div>
-            {/*<section className="property__map map"/>*/}
             <section style={{width: '1300px',  margin: '20px auto'}}>
-              <Map city={city} offers={offers.slice(0, 3)} selectedPoint={selectedPoint}/>
+              <Map city={city} offers={offerList.slice(0, 3)} selectedPoint={point} key={city.id}/>
             </section>
 
 
@@ -198,7 +188,7 @@ function Property({reviews}:PropertyProps): JSX.Element {
             <section className="near-places places">
               <h2 className="near-places__title">Other places in the neighbourhood</h2>
               <div className="near-places__list places__list">
-                <OffersList offers={offers.slice(0, 3)} onListItemHover={onListItemHover}/>
+                <OffersList offers={offerList.slice(0, 3)} />
               </div>
             </section>
           </div>
@@ -208,5 +198,3 @@ function Property({reviews}:PropertyProps): JSX.Element {
 }
 
 export default Property;
-
-// Property
