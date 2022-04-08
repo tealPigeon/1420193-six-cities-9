@@ -1,7 +1,7 @@
 export type Offer = {
   id: number;
   images: string[];
-  price: string;
+  price: number;
   rating: number;
   name: string;
   type: string;

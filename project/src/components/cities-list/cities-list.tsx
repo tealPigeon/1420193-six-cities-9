@@ -3,6 +3,7 @@ import {City} from '../../types/city';
 import {changeCity, fillOffersList} from '../../store/action';
 import {useAppDispatch} from '../../hooks';
 
+
 type CitiesListProps = {
   cities: City[];
   currentCityId: number;
