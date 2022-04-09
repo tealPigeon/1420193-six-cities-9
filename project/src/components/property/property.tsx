@@ -8,7 +8,6 @@ import {Reviews} from '../../types/reviews';
 import Map from '../map/map';
 import OffersList from '../offers-list/offers-list';
 import {useAppSelector} from '../../hooks';
-import {offers} from '../../mocks/offers';
 
 type PropertyProps = {
   reviews: Reviews;
@@ -16,10 +15,11 @@ type PropertyProps = {
 
 function Property({reviews}:PropertyProps): JSX.Element {
   const id = useParams();
+  const offers = useAppSelector((state) => state.offers);
   const city = useAppSelector((state) => state.city);
   const point = useAppSelector((state) => state.savedOffer);
   const propertyOffer : Offer = offers.filter((offer) => String(offer.id)===id.id )[0];
-  const offerList = offers.filter((offer) => offer.city===propertyOffer.city && String(offer.id) !== id.id);
+  const offerList = offers.filter((offer) => offer.city.name===propertyOffer.city.name && String(offer.id) !== id.id);
   const stars = `${propertyOffer.rating*20}%`;
 
   return (
@@ -74,7 +74,7 @@ function Property({reviews}:PropertyProps): JSX.Element {
                 }
                 <div className="property__name-wrapper">
                   <h1 className="property__name">
-                    {propertyOffer.name}
+                    {propertyOffer.title}
                   </h1>
                   {
                     propertyOffer.isFavorite ? (
@@ -104,10 +104,10 @@ function Property({reviews}:PropertyProps): JSX.Element {
                     {propertyOffer.type}
                   </li>
                   <li className="property__feature property__feature--bedrooms">
-                    3 Bedrooms
+                    {propertyOffer.bedrooms} Bedrooms
                   </li>
                   <li className="property__feature property__feature--adults">
-                    Max 4 adults
+                    Max {propertyOffer.maxAdults} adults
                   </li>
                 </ul>
                 <div className="property__price">
@@ -117,57 +117,25 @@ function Property({reviews}:PropertyProps): JSX.Element {
                 <div className="property__inside">
                   <h2 className="property__inside-title">What&apos;s inside</h2>
                   <ul className="property__inside-list">
-                    <li className="property__inside-item">
-                      Wi-Fi
-                    </li>
-                    <li className="property__inside-item">
-                      Washing machine
-                    </li>
-                    <li className="property__inside-item">
-                      Towels
-                    </li>
-                    <li className="property__inside-item">
-                      Heating
-                    </li>
-                    <li className="property__inside-item">
-                      Coffee machine
-                    </li>
-                    <li className="property__inside-item">
-                      Baby seat
-                    </li>
-                    <li className="property__inside-item">
-                      Kitchen
-                    </li>
-                    <li className="property__inside-item">
-                      Dishwasher
-                    </li>
-                    <li className="property__inside-item">
-                      Cabel TV
-                    </li>
-                    <li className="property__inside-item">
-                      Fridge
-                    </li>
+                    {propertyOffer.goods.map((good) => <li className="property__inside-item" key={good}> {good}</li>)}
                   </ul>
                 </div>
                 <div className="property__host">
                   <h2 className="property__host-title">Meet the host</h2>
                   <div className="property__host-user user">
                     <div className="property__avatar-wrapper property__avatar-wrapper--pro user__avatar-wrapper">
-                      <img className="property__avatar user__avatar" src="./img/avatar-angelina.jpg" width={74} height={74} alt="Host avatar" />
+                      <img className="property__avatar user__avatar" src={propertyOffer.host.avatarUrl} width={74} height={74} alt="Host avatar" />
                     </div>
                     <span className="property__user-name">
-                        Angelina
+                      {propertyOffer.host.name}
                     </span>
                     <span className="property__user-status">
-                        Pro
+                      {propertyOffer.host.isPro ? 'Pro' : null}
                     </span>
                   </div>
                   <div className="property__description">
                     <p className="property__text">
-                      A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam. The building is green and from 18th century.
-                    </p>
-                    <p className="property__text">
-                      An independent House, strategically located between Rembrand Square and National Opera, but where the bustle of the city comes to rest in this alley flowery and colorful.
+                      {propertyOffer.description}
                     </p>
                   </div>
                 </div>
@@ -179,7 +147,7 @@ function Property({reviews}:PropertyProps): JSX.Element {
               </div>
             </div>
             <section style={{width: '1300px',  margin: '20px auto'}}>
-              <Map city={city} offers={offerList.slice(0, 3)} selectedPoint={point} key={city.id}/>
+              <Map offers={offerList.slice(0, 3)} selectedPoint={point} key={city.id}/>
             </section>
 
 

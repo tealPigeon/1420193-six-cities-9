@@ -1,25 +1,23 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import React, {useRef, useEffect} from 'react';
 import {Offers, Offer} from '../../types/offer';
 import {Marker} from 'leaflet';
 import leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import useMap from '../../hooks/useMap/useMap';
-import {City} from '../../types/city';
+
 
 const URL_MARKER_DEFAULT = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/pin.svg';
 const URL_MARKER_CURRENT = 'https://assets.htmlacademy.ru/content/intensive/javascript-1/demo/interactive-map/main-pin.svg';
 
 type MapProps = {
-  city: City;
   offers: Offers;
   selectedPoint: Offer | undefined;
 }
 
-function Map({city, offers, selectedPoint}: MapProps): JSX.Element {
+function Map({offers, selectedPoint}: MapProps): JSX.Element {
+
   const mapRef = useRef(null);
-  const map = useMap(mapRef, offers, city);
+  const map = useMap(mapRef, offers);
   const defaultCustomIcon = leaflet.icon({
     iconUrl: URL_MARKER_DEFAULT,
     iconSize: [40, 40],
@@ -37,20 +35,20 @@ function Map({city, offers, selectedPoint}: MapProps): JSX.Element {
     if (map) {
       offers.forEach((offer) => {
         const marker = new Marker({
-          lat: offer.lat,
-          lng: offer.lng,
+          lat: offer.location.latitude,
+          lng: offer.location.longitude,
         });
 
         marker
           .setIcon(
-            selectedPoint !== undefined && offer.name === selectedPoint.name
+            selectedPoint !== undefined && offer.id === selectedPoint.id
               ? currentCustomIcon
               : defaultCustomIcon,
           )
           .addTo(map);
       });
     }
-  }, [map, offers, selectedPoint, city]);
+  }, [map, offers, selectedPoint]);
 
   return (<div style={{height: '800px'}} ref={mapRef} ></div>);
 }

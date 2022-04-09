@@ -9,6 +9,8 @@ import NotFound from '../not-found/not-found';
 import {Offers} from '../../types/offer';
 import {Reviews} from '../../types/reviews';
 import {City} from '../../types/city';
+import {useAppSelector} from '../../hooks';
+import LoadingScreen from '../loading-screen/loading-screen';
 
 type AppProps = {
   offers: Offers;
@@ -17,6 +19,12 @@ type AppProps = {
 }
 
 function App({offers, reviews, cities}: AppProps): JSX.Element {
+  const {isDataLoaded} = useAppSelector((state) => state);
+  if (!isDataLoaded) {
+    return (
+      <LoadingScreen />
+    );
+  }
   return (
     <BrowserRouter>
       <Routes>
