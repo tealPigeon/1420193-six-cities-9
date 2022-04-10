@@ -1,20 +1,25 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {changeCity, fillOffersList, filterOffers, saveOffer, deleteOffer} from './action';
+import {changeCity, fillOffersList, filterOffers, saveOffer, deleteOffer, loadOffers, setError} from './action';
 import {cities} from '../mocks/cities';
-import {offers} from '../mocks/offers';
 import {Offer, Offers} from '../types/offer';
 import {City} from '../types/city';
 
 type initialStateType = {
   city: City;
+  allOffers: Offers;
   offers: Offers;
   savedOffer:Offer | undefined;
+  isDataLoaded: boolean;
+  error: string;
 }
 
 const initialState : initialStateType = {
   city: cities[0],
-  offers: offers.filter((offer) => offer.city === cities[0].name),
+  allOffers: [],
+  offers: [],
   savedOffer:undefined,
+  isDataLoaded: false,
+  error:'',
 };
 export const reducer =  createReducer(initialState, (builder) =>
 {
@@ -34,7 +39,7 @@ export const reducer =  createReducer(initialState, (builder) =>
     })
     .addCase(fillOffersList, (state) =>
     {
-      state.offers = offers.filter((offer) => offer.city === state.city.name);
+      state.offers = state.allOffers.filter((offer) => offer.city.name === state.city.name);
     })
     .addCase(filterOffers, (state,action) =>
     {
@@ -50,7 +55,16 @@ export const reducer =  createReducer(initialState, (builder) =>
           state.offers = state.offers.sort((a, b) => b.price - a.price);
           break;
         default:
-          state.offers = offers.filter((offer) => offer.city === state.city.name);
+          state.offers = state.offers.filter((offer) => offer.city.name === state.city.name);
       }
+    })
+    .addCase(loadOffers, (state, action) => {
+      state.allOffers = action.payload;
+      state.offers = state.allOffers.filter((offer) => offer.city.name === state.city.name);
+      /* eslint-disable no-console */      console.log(action.payload.length); /* eslint-enable no-console */
+      state.isDataLoaded = true;
+    })
+    .addCase(setError, (state, action) => {
+      state.error = action.payload;
     });
 });
