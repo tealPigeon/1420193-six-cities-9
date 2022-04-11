@@ -7,9 +7,10 @@ import {cities} from './mocks/cities';
 import ErrorMessage from './components/error-message/errorMessage';
 import {store} from './store';
 import {Provider} from 'react-redux';
-import {fetchOffersAction} from './store/api-actions';
+import {fetchOffersAction, checkAuthAction} from './store/api-actions';
 
 store.dispatch(fetchOffersAction());
+store.dispatch(checkAuthAction());
 
 ReactDOM.render(
   <React.StrictMode>

@@ -19,6 +19,7 @@ type AppProps = {
 }
 
 function App({offers, reviews, cities}: AppProps): JSX.Element {
+
   const {isDataLoaded} = useAppSelector((state) => state);
   if (!isDataLoaded) {
     return (
